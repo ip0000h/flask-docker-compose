@@ -1,0 +1,13 @@
+Flask
+Flask-Admin
+Flask-Bcrypt
+Flask-DebugToolbar
+Flask-Login
+Flask-Migrate
+Flask-Script
+Flask-SQLAlchemy
+Flask-Testing
+Flask-WTF
+psycopg2
+supervisor
+uwsgi

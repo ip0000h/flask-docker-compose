@@ -1,0 +1,26 @@
+flaskapp:
+  build: ./
+  env_file: .env
+  working_dir: /var/www/app
+  command: bash -c "python app.py"
+  volumes:
+    - ./app:/var/www/app:rw
+    - ./app/log:/var/www/app/log:rw
+    - ./supervisor/supervisord.conf:/etc/supervisord.conf:ro
+    - ./supervisor/conf.d:/etc/supervisor/conf.d:ro
+  links:
+    - postgresql
+  environment:
+    - DEBUG='true'
+    - FLASK_SETTINGS=settings/dev.py
+  ports:
+    - "5000:5000"
+
+postgresql:
+  restart: always
+  image: postgres:latest
+  env_file: .env
+  volumes:
+    - ./dockerfiles/pgdata:/var/lib/postgresql/data/pgdata:rw
+  ports:
+    - "5432:5432"

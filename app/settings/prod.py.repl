@@ -1,0 +1,4 @@
+# -*- coding: utf-8 -*-
+DEGUG = False
+SECRET_KEY = '<replace with a secret key>'
+SQLALCHEMY_DATABASE_URI = 'postgresql://flask:flask@postgresql/flask'

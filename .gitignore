@@ -1,0 +1,6 @@
+app/log
+app/migrations
+app/run
+app/settings/prod.py
+dockerfiles
+*.pyc
