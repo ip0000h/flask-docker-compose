@@ -1,29 +1,36 @@
 docker-flask
 ============
 
-[![Build Status](https://travis-ci.org/ip0000h/docker-flask.svg)](https://travis-ci.org/ip0000h/docker-flask)
+[![Circle CI](https://circleci.com/gh/ip0000h/docker-flask.svg?style=svg)](https://circleci.com/gh/ip0000h/docker-flask)
 
 ## Application scheme
 
 Including the followings:
 
-- Flask application running on uwsgi with next extensions:
-  - Flask-Admin
-  - Flask-Bcrypt
-  - Flask-DebugToolbar
-  - Flask-Login
-  - Flask-Migrate
-  - Flask-Script
-  - Flask-SQLAlchemy
-  - Flask-Testing
-  - Flask-WTF
+- Docker and Docker-Compose for managing project
 
+- [Flask](https://github.com/mitsuhiko/flask) application running on uwsgi with next extensions:
+  - Flask-Admin - [https://github.com/flask-admin/flask-admin](https://github.com/flask-admin/flask-admin)
+  - Flask-Bcrypt - [https://github.com/maxcountryman/flask-bcrypt](https://github.com/maxcountryman/flask-bcrypt)
+  - Flask-DebugToolbar - [https://github.com/mgood/flask-debugtoolbar](https://github.com/mgood/flask-debugtoolbar)
+  - Flask-Login - [https://github.com/maxcountryman/flask-login](https://github.com/maxcountryman/flask-login)
+  - Flask-Migrate - [https://github.com/miguelgrinberg/Flask-Migrate](https://github.com/miguelgrinberg/Flask-Migrate)
+  - Flask-Script - [https://github.com/smurfix/flask-script](https://github.com/smurfix/flask-script)
+  - Flask-SQLAlchemy - [https://github.com/mitsuhiko/flask-sqlalchemy](https://github.com/mitsuhiko/flask-sqlalchemy)
+  - Flask-Testing - [https://github.com/jarus/flask-testing](https://github.com/jarus/flask-testing)
+  - Flask-WTF - [https://github.com/lepture/flask-wtf](https://github.com/lepture/flask-wtf)
 
-- PostgreSQL database(application uses SQLAlchemy library)
+- Celery application
 
+- Supervisor for managing python applications
 
-- Nginx frontend server for production mode
+- PostgreSQL database
 
+- Nginx frontend server for production mode(for production only)
+
+- Redis server
+
+- RabbitMQ server(for production only)
 
 
 ## Pre-Build
