@@ -2,7 +2,7 @@ flaskapp:
   build: ./
   env_file: .env
   working_dir: /var/www/app
-  command: bash -c "python app.py"
+  command: bash -c "supervisord -c /etc/supervisord.conf"
   volumes:
     - ./app:/var/www/app:rw
     - ./app/log:/var/www/app/log:rw
@@ -10,8 +10,9 @@ flaskapp:
     - ./supervisor/conf.d:/etc/supervisor/conf.d:ro
   links:
     - postgresql
+    - redis
   environment:
-    - DEBUG='true'
+    - APP_ENVIRONMENT=DEVELOPMENT
     - FLASK_SETTINGS=settings/dev.py
   ports:
     - "5000:5000"
@@ -19,8 +20,14 @@ flaskapp:
 postgresql:
   restart: always
   image: postgres:latest
-  env_file: .env
+  env_file: postgresql/.env
   volumes:
     - ./dockerfiles/pgdata:/var/lib/postgresql/data/pgdata:rw
   ports:
     - "5432:5432"
+
+redis:
+  restart: always
+  image: redis:latest
+  ports:
+    - "6379:6379"

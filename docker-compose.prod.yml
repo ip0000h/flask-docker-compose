@@ -2,7 +2,7 @@ flaskapp:
   build: ./
   env_file: .env
   working_dir: /var/www/app
-  command: bash -c "supervisord -n"
+  command: bash -c "supervisord -c /etc/supervisord.conf"
   volumes:
     - ./app:/var/www/app:rw
     - ./app/log:/var/www/app/log:rw
@@ -10,22 +10,39 @@ flaskapp:
     - ./supervisor/conf.d:/etc/supervisor/conf.d:ro
   links:
     - postgresql
+    - rabbitmq
+    - redis
   environment:
-    - PRODUCTION='true'
+    - APP_ENVIRONMENT=PRODUCTION
     - FLASK_SETTINGS=settings/prod.py
 
 postgresql:
   restart: always
   image: postgres:latest
-  env_file: .env
+  env_file: postgresql/.env
   volumes:
     - ./dockerfiles/pgdata:/var/lib/postgresql/data/pgdata:rw
   ports:
     - "5432:5432"
 
+rabbitmq:
+  restart: always
+  image: rabbitmq:latest
+  env_file: rabbitmq/.env
+  ports:
+    - "5672:5672"
+
+redis:
+  restart: always
+  image: redis:latest
+  env_file: redis/.env
+  ports:
+    - "6379:6379"
+
 nginx:
   restart: always
   image: nginx:latest
+  env_file: nginx/.env
   volumes:
     - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
     - ./nginx/flask_app.conf:/etc/nginx/sites-enabled/flask_app.conf:ro

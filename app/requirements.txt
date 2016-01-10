@@ -1,8 +1,10 @@
+celery
 Flask
 Flask-Admin
 Flask-Bcrypt
 Flask-DebugToolbar
 Flask-Login
+Flask-Mail
 Flask-Migrate
 Flask-Script
 Flask-SQLAlchemy

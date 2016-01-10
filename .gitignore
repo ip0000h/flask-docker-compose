@@ -2,5 +2,6 @@ app/log
 app/migrations
 app/run
 app/settings/prod.py
+app/static
 dockerfiles
 *.pyc
