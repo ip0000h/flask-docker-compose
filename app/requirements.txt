@@ -11,5 +11,6 @@ Flask-SQLAlchemy
 Flask-Testing
 Flask-WTF
 psycopg2
+redis
 supervisor
 uwsgi

@@ -4,9 +4,9 @@ machine:
 
 dependencies:
   pre:
-    - pip install docker-compose
+    - sudo pip install -U docker-compose
 
 test:
-  pre:
+  override:
     - docker-compose build flaskapp
     - docker-compose up -d

@@ -5,7 +5,6 @@ flaskapp:
   command: bash -c "supervisord -c /etc/supervisord.conf"
   volumes:
     - ./app:/var/www/app:rw
-    - ./app/log:/var/www/app/log:rw
     - ./supervisor/supervisord.conf:/etc/supervisord.conf:ro
     - ./supervisor/conf.d:/etc/supervisor/conf.d:ro
   links:
@@ -29,5 +28,8 @@ postgresql:
 redis:
   restart: always
   image: redis:latest
+  env_file: redis/.env
+  volumes:
+    - redis/redis.conf:/usr/local/etc/redis/redis.conf
   ports:
     - "6379:6379"

@@ -16,6 +16,12 @@ manager.add_command('db', MigrateCommand)
 
 
 @manager.command
+def create_db():
+    """Creates database migrations and upgrades it"""
+    pass
+
+
+@manager.command
 def create_user(is_admin=False):
     """Creates an user in database"""
     username = prompt("Enter username")
