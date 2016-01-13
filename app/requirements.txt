@@ -1,4 +1,4 @@
-celery
+# Flask and Flask extensions
 Flask
 Flask-Admin
 Flask-Bcrypt
@@ -10,6 +10,8 @@ Flask-Script
 Flask-SQLAlchemy
 Flask-Testing
 Flask-WTF
+# Database and System
+ipython
 psycopg2
 redis
 supervisor

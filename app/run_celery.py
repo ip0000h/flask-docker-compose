@@ -25,9 +25,18 @@ celery = make_celery(app)
 
 
 @celery.task(bind=True, name='send_email', max_retries=None)
-def send_email(self, email, theme, message):
+def test(self, email, theme, message):
     with app.app_context():
         msg = Message(theme, recipients=[email])
         msg.body = message + u""" \n
         """
         mail.send(msg)
+
+
+@celery.task(bind=True, name='send_email', max_retries=None)
+def send_email(self, email, theme, message):
+    with app.app_context():
+        msg = Message(theme, recipients=[email])
+        msg.body = message + u""" \n
+        """
+        res = mail.send(msg)
