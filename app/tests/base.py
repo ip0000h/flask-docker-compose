@@ -30,6 +30,19 @@ class UserTestCase(BaseTestCase):
         db.session.commit()
         assert user in db.session
 
+    def test_make_unique_nickname(self):
+        u = User("john", "john@example.com", "john")
+        db.session.add(u)
+        db.session.commit()
+        nickname = User.make_unique_nickname("john")
+        assert nickname != "john"
+        u = User(nickname, "susan@example.com")
+        db.session.add(u)
+        db.session.commit()
+        nickname2 = User.make_unique_nickname("john")
+        assert nickname2 != "john"
+        assert nickname2 != nickname
+
 
 class PageTestCase(BaseTestCase):
     """A pages test case"""

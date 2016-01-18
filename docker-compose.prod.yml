@@ -1,6 +1,9 @@
 flaskapp:
   build: ./
   env_file: .env
+  dns:
+    - 8.8.8.8
+    - 9.9.9.9
   working_dir: /var/www/app
   command: bash -c "supervisord -c /etc/supervisord.conf"
   volumes:
@@ -49,3 +52,11 @@ nginx:
     - ./app/run/uwsgi:/var/run/uwsgi:ro
   ports:
     - "80:80"
+
+postfix:
+  restart: always
+  image: catatnight/postfix:latest
+  env_file: postfix/.env
+  ports:
+    - "25:25"
+    - "587:587"

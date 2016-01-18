@@ -6,11 +6,14 @@ Flask-DebugToolbar
 Flask-Login
 Flask-Mail
 Flask-Migrate
+Flask-Profiler
 Flask-Script
 Flask-SQLAlchemy
 Flask-Testing
 Flask-WTF
 # Database and System
+celery
+coverage
 ipython
 psycopg2
 redis

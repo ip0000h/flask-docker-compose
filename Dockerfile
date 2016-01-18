@@ -6,6 +6,9 @@ RUN apt-get update && apt-get install -qq -y --no-install-recommends \
     build-essential \
     libffi-dev \
     libpq-dev \
+    libsqlite3-dev \
+    supervisor \
+    sqlite3 \
 && apt-get purge -y --auto-remove \
     -o APT::AutoRemove::RecommendsImportant=false \
     -o APT::AutoRemove::SuggestsImportant=false $buildDeps \
@@ -14,4 +17,4 @@ RUN apt-get update && apt-get install -qq -y --no-install-recommends \
 && easy_install pip
 
 COPY ./app/requirements.txt ./requirements.txt
-RUN pip install -r requirements.txt
+RUN pip install -U -r requirements.txt

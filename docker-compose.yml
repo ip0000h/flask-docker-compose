@@ -1,6 +1,9 @@
 flaskapp:
   build: ./
   env_file: .env
+  dns:
+    - 8.8.8.8
+    - 9.9.9.9
   working_dir: /var/www/app
   command: bash -c "supervisord -c /etc/supervisord.conf"
   volumes:
@@ -10,6 +13,7 @@ flaskapp:
   links:
     - postgresql
     - redis
+    # - smtp
   environment:
     - APP_ENVIRONMENT=DEVELOPMENT
     - FLASK_SETTINGS=settings/dev.py
@@ -33,3 +37,10 @@ redis:
     - redis/redis.conf:/usr/local/etc/redis/redis.conf
   ports:
     - "6379:6379"
+
+postfix:
+  restart: always
+  image: catatnight/postfix:latest
+  env_file: postfix/.env
+  ports:
+    - "25:25"
