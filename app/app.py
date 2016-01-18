@@ -5,10 +5,13 @@ from functools import wraps
 from flask import Flask
 from flask import flash, request, redirect, render_template, url_for
 from flask_debugtoolbar import DebugToolbarExtension
+from flask_admin import Admin
 from flask.ext.login import LoginManager, current_user, login_user, logout_user
 # import flask_profiler
 
+
 # Import local modules
+from admin.views import UserView
 from database import db
 from forms import LoginForm
 from models import User
@@ -87,6 +90,11 @@ def index():
 def secret():
     return render_template('index.html', page=u"Secret page!")
 
+
+# Create a admin object
+admin = Admin(app)
+# Add views to admin object
+admin.add_view(UserView(User, db.session))
 
 # Create a tolbar object
 toolbar = DebugToolbarExtension(app)
