@@ -1,16 +1,20 @@
 # -*- coding: utf-8 -*-
 from flask.ext.bcrypt import check_password_hash, generate_password_hash
-from sqlalchemy import types
+from sqlalchemy import types, Column
+from sqlalchemy.ext.declarative import declarative_base
 
 
-class User(types.Model):
+Base = declarative_base()
+
+
+class User(Base):
     __tablename__ = 'users'
-    id = types.Column(types.Integer, primary_key=True)
-    username = types.Column(types.String(50), unique=True, nullable=False)
-    password = types.Column(types.String(255), nullable=False)
-    email = types.Column(types.String(50), unique=True, nullable=True)
-    is_active = types.Column(types.Boolean, nullable=False, default=True)
-    is_admin = types.Column(types.Boolean, nullable=False, default=False)
+    id = Column(types.Integer, primary_key=True)
+    username = Column(types.String(50), unique=True, nullable=False)
+    password = Column(types.String(255), nullable=False)
+    email = Column(types.String(50), unique=True, nullable=True)
+    is_active = Column(types.Boolean, nullable=False, default=True)
+    is_admin = Column(types.Boolean, nullable=False, default=False)
 
     def __init__(self, username, password, email=None):
         self.username = username

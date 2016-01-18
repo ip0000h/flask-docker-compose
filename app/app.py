@@ -1,20 +1,20 @@
 # -*- coding: utf-8 -*-
-from functools import wraps
 
 # Import Flask app, modules and extensions
 from flask import Flask
-from flask import flash, request, redirect, render_template, url_for
+from flask import g, render_template
 from flask_debugtoolbar import DebugToolbarExtension
 from flask_admin import Admin
-from flask.ext.login import LoginManager, current_user, login_user, logout_user
+from flask.ext.login import current_user, LoginManager
 # import flask_profiler
 
 
 # Import local modules
-from admin.views import UserView
+from admin.views import UserView, MyAdminIndexView
 from database import db
-from forms import LoginForm
 from models import User
+from users.decorators import requires_login
+
 
 # Create a flask web app
 app = Flask(__name__)
@@ -38,44 +38,9 @@ db.init_app(app)
 #     }
 # }
 
-
-# Deorated function for logging
-def login_required(f):
-    @wraps(f)
-    def decorated_function(*args, **kwargs):
-        if not current_user.is_authenticated:
-            return redirect(url_for('login'))
-        return f(*args, **kwargs)
-    return decorated_function
-
-
-# Logging method
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-    form = LoginForm()
-    if form.validate_on_submit():
-        user = User.query.get(form.user.id)
-        login_user(user)
-        flash(u"Successfully logged in as %s" % form.user.username)
-        return redirect(request.args.get('next') or url_for('secret'))
-    return render_template('login.html', form=form)
-
-# Logout method
-@app.route('/logout')
-@login_required
-def logout():
-    logout_user()
-    return redirect(url_for('login'))
-
-# Create and setup logger manager object
-login_manager = LoginManager()
-login_manager.init_app(app)
-login_manager.login_view = 'login'
-
-
-@login_manager.user_loader
-def load_user(userid):
-    return User.query.get(userid)
+@app.before_request
+def before_request():
+    g.user = current_user
 
 
 # Index page
@@ -86,13 +51,24 @@ def index():
 
 # Secret page
 @app.route('/secret')
-@login_required
+@requires_login
 def secret():
     return render_template('index.html', page=u"Secret page!")
 
 
+# Create and setup logger manager object
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = 'login_view'
+
+
+@login_manager.user_loader
+def load_user(userid):
+    return User.query.get(userid)
+
+
 # Create a admin object
-admin = Admin(app)
+admin = Admin(app, index_view=MyAdminIndexView())
 # Add views to admin object
 admin.add_view(UserView(User, db.session))
 

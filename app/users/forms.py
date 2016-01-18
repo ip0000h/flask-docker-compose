@@ -3,6 +3,7 @@ from flask.ext.wtf import Form, RecaptchaField
 from wtforms import TextField, PasswordField, BooleanField
 from wtforms.validators import Required, EqualTo, Email
 
+from database import db
 from models import User
 
 
@@ -16,7 +17,7 @@ class LoginForm(Form):
         if not rv:
             return False
 
-        user = User.query.filter_by(
+        user = db.session.query(User).filter_by(
             username=self.username.data).first()
         if user is None:
             self.username.errors.append('unknown username')

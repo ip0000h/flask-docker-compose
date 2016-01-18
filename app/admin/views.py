@@ -17,7 +17,7 @@ class UserView(ModelView):
         return current_user.is_authenticated
 
     def inaccessible_callback(self, name, **kwargs):
-        return redirect(url_for('login', next=request.url))
+        return redirect(url_for('.login', next=request.url))
 
 
 # Create customized index view class that handles login & registration
@@ -28,7 +28,7 @@ class MyAdminIndexView(AdminIndexView):
             return redirect(url_for('.login_view'))
         return super(MyAdminIndexView, self).index()
 
-    @expose('/login/', methods=('GET', 'POST'))
+    @expose('/login', methods=('GET', 'POST'))
     def login_view(self):
         # handle user login
         form = LoginForm(request.form)
@@ -38,12 +38,12 @@ class MyAdminIndexView(AdminIndexView):
 
         if current_user.is_authenticated:
             return redirect(url_for('.index'))
-        link = '<p>Don\'t have an account? <a href="' + url_for('.register_view') + '">Click here to register.</a></p>'
+        # link = '<p>Don\'t have an account? <a href="' + url_for('.register_view') + '">Click here to register.</a></p>'
         self._template_args['form'] = form
-        self._template_args['link'] = link
+        # self._template_args['link'] = link
         return super(MyAdminIndexView, self).index()
 
-    @expose('/logout/')
+    @expose('/logout')
     def logout_view(self):
         logout_user()
         return redirect(url_for('.index'))
