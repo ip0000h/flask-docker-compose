@@ -13,7 +13,7 @@ flaskapp:
   links:
     - postgresql
     - redis
-    # - smtp
+    - postfix
   environment:
     - APP_ENVIRONMENT=DEVELOPMENT
     - FLASK_SETTINGS=settings/dev.py

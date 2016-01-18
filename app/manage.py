@@ -21,7 +21,7 @@ manager.add_command('db', MigrateCommand)
 @manager.command
 def create_db():
     """Creates database migrations and upgrades it"""
-    pass
+    db.create_all()
 
 # Creates A User
 @manager.command
@@ -40,7 +40,6 @@ def create_user(is_admin=False):
         print("Error: Passwords don't match")
 
 
-# Configure Secret Key
 def install_secret_key(app, filename='secret_key'):
     """Configure the SECRET_KEY from a file
     in the instance directory.
@@ -60,6 +59,12 @@ def install_secret_key(app, filename='secret_key'):
             print('mkdir -p {filename}'.format(filename=full_path))
         print('head -c 24 /dev/urandom > {filename}'.format(filename=filename))
         sys.exit(1)
+
+
+@manager.command
+def runtests():
+    """Run all tests"""
+    pass
 
 
 if __name__ == '__main__':

@@ -6,7 +6,7 @@ from flask import Flask
 from flask import flash, request, redirect, render_template, url_for
 from flask_debugtoolbar import DebugToolbarExtension
 from flask.ext.login import LoginManager, current_user, login_user, logout_user
-import flask_profiler
+# import flask_profiler
 
 # Import local modules
 from database import db
@@ -26,14 +26,14 @@ if not app.config['TESTING']:
 # Initialize db
 db.init_app(app)
 
-#  You need to declare necessary configuration to initialize
-# flask-profiler as follows:
-app.config["flask_profiler"] = {
-    "enabled": app.config["DEBUG"],
-    "storage": {
-        "engine": "sqlite",
-    }
-}
+# #  You need to declare necessary configuration to initialize
+# # flask-profiler as follows:
+# app.config["flask_profiler"] = {
+#     "enabled": app.config["DEBUG"],
+#     "storage": {
+#         "engine": "sqlite",
+#     }
+# }
 
 
 # Deorated function for logging
@@ -92,10 +92,10 @@ def secret():
 toolbar = DebugToolbarExtension(app)
 
 
-# In order to active flask-profiler, you have to pass flask
-# app as an argument to flask-profiler.
-# All the endpoints declared so far will be tracked by flask-profiler.
-flask_profiler.init_app(app)
+# # In order to active flask-profiler, you have to pass flask
+# # app as an argument to flask-profiler.
+# # All the endpoints declared so far will be tracked by flask-profiler.
+# flask_profiler.init_app(app)
 
 # Run appliation in debug mode
 if __name__ == '__main__':

@@ -9,7 +9,9 @@ docker-flask
 
 Including the followings:
 
+
 - Docker and Docker-Compose for managing project
+
 
 - [Flask](https://github.com/mitsuhiko/flask) application running on uwsgi with next extensions:
   - Flask-Admin - [https://github.com/flask-admin/flask-admin](https://github.com/flask-admin/flask-admin)
@@ -18,26 +20,29 @@ Including the followings:
   - Flask-Login - [https://github.com/maxcountryman/flask-login](https://github.com/maxcountryman/flask-login)
   - Flask-Mail - [https://github.com/mattupstate/flask-mail](https://github.com/mattupstate/flask-mail)
   - Flask-Migrate - [https://github.com/miguelgrinberg/Flask-Migrate](https://github.com/miguelgrinberg/Flask-Migrate)
-  - Flask-Profiler - []()
+  - Flask-Profiler - [https://github.com/muatik/flask-profiler](https://github.com/muatik/flask-profiler)
   - Flask-Script - [https://github.com/smurfix/flask-script](https://github.com/smurfix/flask-script)
   - Flask-SQLAlchemy - [https://github.com/mitsuhiko/flask-sqlalchemy](https://github.com/mitsuhiko/flask-sqlalchemy)
   - Flask-Testing - [https://github.com/jarus/flask-testing](https://github.com/jarus/flask-testing)
   - Flask-WTF - [https://github.com/lepture/flask-wtf](https://github.com/lepture/flask-wtf)
 
-- Celery application
 
-- Supervisor for managing python applications
-
-- PostgreSQL database
-
-- Nginx frontend server for production mode(for production only)
-
-- Redis server
-
-- RabbitMQ server(for production only)
+- [Celery](http://www.celeryproject.org/install/) application
 
 
-- Full tree of project:
+- [Supervisor](http://supervisord.org/) for managing python applications
+
+
+- [PostgreSQL](http://www.postgresql.org/) database
+
+
+- [Nginx](http://nginx.org/) frontend server for production mode(for production only)
+
+
+- [Redis](http://redis.io/) server
+
+
+- [RabbitMQ](http://www.rabbitmq.com/) server(for production only)
 
 
 
@@ -68,11 +73,15 @@ To start applications with production environment(first copy configuration file 
 
 To initialize, create migration and upgrade your database:
 
-- ```docker-compose run --rm flaskapp bash -c "python manage.py db init && python manage.py db migrate && python manage.py db upgrade"```
+- ```docker exec -it dockerflask_flaskapp_1 bash -c "python manage.py create_db"```
+
+To run ipython debug flaskapp shell:
+
+- ```docker exec -it dockerflask_flaskapp_1 bash -c "python manage.py shell"```
 
 To create admin user:
 
-- ```docker-compose run --rm python manage.py create_user -i```
+- ```docker exec -it dockerflask_flaskapp_1 bash -c "python manage.py create_user -i```
 
 
 ### Stop and destroy a cluster:
@@ -92,11 +101,11 @@ To check standard logs:
 
 - ```docker-compose logs```
 
-Access the application containers shell(application containers name is dockerflask_flaskapp_1 by default):
+Access the application containers shell:
 
 - ```docker exec -it dockerflask_flaskapp_1 bash```
 
 
 ### Running tests:
 
-- ```docker-compose run --rm flaskapp python test.py```
+- ```docker exec -it dockerflask_flaskapp_1 bash -c "python manage.py runtests```
