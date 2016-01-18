@@ -1,10 +1,12 @@
 # -*- coding: utf-8 -*-
+
 DEBUG = True
 SECRET_KEY = '<replace with a secret key>'
 HOST = '0.0.0.0'
 PORT = 5000
 
 SQLALCHEMY_DATABASE_URI = 'postgresql://flask:flask@postgresql/flask'
+SQLALCHEMY_ECHO = True
 SQLALCHEMY_TRACK_MODIFICATIONS = True
 
 CELERY_TIMEZONE = 'Europe/Moscow'
@@ -21,6 +23,6 @@ MAIL_USE_TLS = False
 MAIL_USERNAME = 'support@postfix'
 
 RECAPTCHA_USE_SSL = False
-RECAPTCHA_PUBLIC_KEY = '6LeYIbsSAAAAACRPIllxA7wvXjIE411PfdB2gt2J'
-RECAPTCHA_PRIVATE_KEY = '6LeYIbsSAAAAAJezaIq3Ft_hSTo0YtyeFG-JgRtu'
+RECAPTCHA_PUBLIC_KEY = '<replace with a captcha public key>'
+RECAPTCHA_PRIVATE_KEY = 'replace with a captcha private key'
 RECAPTCHA_OPTIONS = {'theme': 'white'}

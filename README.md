@@ -108,4 +108,4 @@ Access the application containers shell:
 
 ### Running tests:
 
-- ```docker exec -it dockerflask_flaskapp_1 bash -c "python manage.py runtests```
+- ```docker exec -it dockerflask_flaskapp_1 bash -c "python manage.py runtests"```

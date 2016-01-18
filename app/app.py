@@ -14,6 +14,7 @@ from admin.views import UserView, MyAdminIndexView
 from database import db
 from models import User
 from users.decorators import requires_login
+from users.views import users as users_blueprint
 
 
 # Create a flask web app
@@ -59,18 +60,21 @@ def secret():
 # Create and setup logger manager object
 login_manager = LoginManager()
 login_manager.init_app(app)
-login_manager.login_view = 'login_view'
+login_manager.login_view = 'users.views.login_view'
 
 
 @login_manager.user_loader
 def load_user(userid):
-    return User.query.get(userid)
+    return db.session.query(User).get(userid)
 
 
 # Create a admin object
 admin = Admin(app, index_view=MyAdminIndexView())
 # Add views to admin object
 admin.add_view(UserView(User, db.session))
+
+# Register blueprint for users app
+app.register_blueprint(users_blueprint, url_prefix='/users')
 
 # Create a tolbar object
 toolbar = DebugToolbarExtension(app)
