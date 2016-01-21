@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+{% extends 'admin/master.html' %}
+
+{% block body %}
+  <div><h5>Hello, <a href="#">{{current_user.username}}</a></h5></div>
+  <div><h5>Last logged in: {{current_user.last_logged}}</h5></div>
+  <div  class="panel panel-default" ng-controller="ServerInfoCtrl">
+    <table class="table table-bordered">
+      <tr>
+        <th>Time</th>
+        <td>{[{server_time}]}</td>
+      </tr>
+      <tr>
+        <th>Load average</th>
+        <td>{[{server_average}]}</td>
+      </tr>
+      <tr>
+        <th>Users logged</th>
+        <td>{[{users_logged}]}</td>
+      </tr>
+      <tr>
+        <th>Admins logged</th>
+        <td>{[{admins_logged}]}</td>
+      </tr>
+    </table>
+  </div>
+{% endblock %}

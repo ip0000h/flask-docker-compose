@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from flask import Blueprint, flash, redirect, render_template, request, url_for
 from flask.ext.login import login_user, logout_user
 
@@ -8,7 +10,7 @@ from models import User
 
 users = Blueprint('users', __name__)
 
-# Logging method
+
 @users.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
@@ -20,7 +22,6 @@ def login():
     return render_template('login.html', form=form)
 
 
-# Logout method
 @users.route('/logout')
 @requires_login
 def logout():

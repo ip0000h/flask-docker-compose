@@ -111,5 +111,5 @@ Access the application containers shell:
 - ```docker exec -it dockerflask_flaskapp_1 bash -c "python manage.py runtests"```
 
 
-[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/ip0000h/docker-flask/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
 
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/ip0000h/docker-flask/trend.png)](https://bitdeli.com/free "Bitdeli Badge")

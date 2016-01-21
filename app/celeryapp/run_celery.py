@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+
 from celery import Celery
 from flask.ext.mail import Mail, Message
 
@@ -24,8 +25,8 @@ def make_celery(app):
 celery = make_celery(app)
 
 
-@celery.task(bind=True, name='send_email', max_retries=None)
-def test(self, email, theme, message):
+@celery.task(bind=True, name='test', max_retries=None)
+def test(self):
     with app.app_context():
         return 'ok!'
 

@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+
 from flask.ext.wtf import Form, RecaptchaField
 from wtforms import TextField, PasswordField, BooleanField
 from wtforms.validators import Required, EqualTo, Email
@@ -40,3 +41,7 @@ class RegisterForm(Form):
         EqualTo('password', message='passwords must match')
         ])
     recaptcha = RecaptchaField()
+
+
+class ProfileForm(Form):
+    pass

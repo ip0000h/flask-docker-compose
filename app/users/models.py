@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+
 from flask.ext.bcrypt import check_password_hash, generate_password_hash
 from sqlalchemy import types, Column
 from sqlalchemy.ext.declarative import declarative_base
@@ -11,10 +12,10 @@ class User(Base):
     __tablename__ = 'users'
     id = Column(types.Integer, primary_key=True)
     username = Column(types.String(50), unique=True, nullable=False)
-    password = Column(types.String(255), nullable=False)
     email = Column(types.String(50), unique=True, nullable=True)
     is_active = Column(types.Boolean, nullable=False, default=True)
     is_admin = Column(types.Boolean, nullable=False, default=False)
+    _password = Column('password', types.String(64), nullable=False)
 
     def __init__(self, username, password, email=None):
         self.username = username
@@ -39,12 +40,30 @@ class User(Base):
     def get_id(self):
         return str(self.id)
 
-    def set_password(self, new_password):
-        self.password = self.hash_password(new_password)
+    def _get_password(self):
+        return self._password
+
+    def _set_password(self, password):
+        self._password = generate_password_hash(password)
+
+    # Hide password encryption by exposing password field only.
+    password = types.synonym('_password',
+                          descriptor=property(_get_password,
+                                              _set_password))
 
     def check_password(self, password):
+        if self.password is None:
+            return False
         return check_password_hash(self.password, password)
 
-    @staticmethod
-    def hash_password(password):
-        return generate_password_hash(password)
+    @classmethod
+    def search(cls, keywords):
+        criteria = []
+        for keyword in keywords.split():
+            keyword = '%' + keyword + '%'
+            criteria.append(types.or_(
+                User.name.ilike(keyword),
+                User.email.ilike(keyword),
+            ))
+        q = reduce(types.and_, criteria)
+        return cls.query.filter(q)

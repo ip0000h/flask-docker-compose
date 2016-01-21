@@ -6,8 +6,6 @@ from flask import g, render_template
 from flask_debugtoolbar import DebugToolbarExtension
 from flask_admin import Admin
 from flask.ext.login import current_user, LoginManager
-# import flask_profiler
-
 
 # Import local modules
 from admin.views import UserView, MyAdminIndexView
@@ -29,15 +27,6 @@ if not app.config['TESTING']:
 
 # Initialize db
 db.init_app(app)
-
-# #  You need to declare necessary configuration to initialize
-# # flask-profiler as follows:
-# app.config["flask_profiler"] = {
-#     "enabled": app.config["DEBUG"],
-#     "storage": {
-#         "engine": "sqlite",
-#     }
-# }
 
 @app.before_request
 def before_request():
@@ -69,7 +58,7 @@ def load_user(userid):
 
 
 # Create a admin object
-admin = Admin(app, index_view=MyAdminIndexView())
+admin = Admin(app, index_view=MyAdminIndexView(), template_mode='bootstrap3')
 # Add views to admin object
 admin.add_view(UserView(User, db.session))
 
@@ -79,11 +68,6 @@ app.register_blueprint(users_blueprint, url_prefix='/users')
 # Create a tolbar object
 toolbar = DebugToolbarExtension(app)
 
-
-# # In order to active flask-profiler, you have to pass flask
-# # app as an argument to flask-profiler.
-# # All the endpoints declared so far will be tracked by flask-profiler.
-# flask_profiler.init_app(app)
 
 # Run appliation in debug mode
 if __name__ == '__main__':

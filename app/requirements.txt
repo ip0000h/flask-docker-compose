@@ -6,7 +6,6 @@ Flask-DebugToolbar
 Flask-Login
 Flask-Mail
 Flask-Migrate
-Flask-Profiler
 Flask-Script
 Flask-SQLAlchemy
 Flask-Testing

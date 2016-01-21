@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 DEBUG = True
+DEBUG_TB_INTERCEPT_REDIRECTS = False
 SECRET_KEY = '<replace with a secret key>'
 HOST = '0.0.0.0'
 PORT = 5000
@@ -19,6 +20,7 @@ CELERYD_POOL_RESTARTS = True
 CELERY_ACCEPT_CONTENT = ['pickle', 'json', 'msgpack', 'yaml']
 
 MAIL_SERVER = 'postfix'
+MAIL_PORT = 25
 MAIL_USE_TLS = False
 MAIL_USERNAME = 'support@postfix'
 

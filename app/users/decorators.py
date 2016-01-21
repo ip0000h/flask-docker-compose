@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from functools import wraps
 
 from flask import flash, g, redirect, url_for, request

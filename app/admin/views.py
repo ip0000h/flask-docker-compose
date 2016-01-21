@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
+
 from flask import request, redirect, url_for
 from flask_admin.base import AdminIndexView
 from flask_admin.contrib.sqla import ModelView
 from flask.ext.login import current_user
 
 
-# User view for admin
 class UserView(ModelView):
+    """User model view for admin"""
     can_delete = False
     # Don't display the password on the list of Users
     column_exclude_list = ('password',)
@@ -22,9 +23,8 @@ class UserView(ModelView):
         return redirect(url_for('users.login', next=request.url))
 
 
-# Create customized index view class that handles login & registration
 class MyAdminIndexView(AdminIndexView):
-
+    """Create customized index view class that handles login & registration"""
     def is_accessible(self):
         return current_user.is_authenticated
 
