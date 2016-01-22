@@ -2,14 +2,23 @@
 
 from functools import wraps
 
-from flask import flash, g, redirect, url_for, request
+from flask import abort
+from flask.ext.login import current_user
+
+
+def admin_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if not current_user.is_admin():
+            abort(403)
+        return f(*args, **kwargs)
+    return decorated_function
 
 
 def requires_login(f):
   @wraps(f)
   def decorated_function(*args, **kwargs):
-    if g.user is None:
-      flash(u'You need to be signed in for this page.')
-      return redirect(url_for('login', next=request.path))
+    if current_user is None:
+      return redirect(url_for('.login', next=request.path))
     return f(*args, **kwargs)
   return decorated_function

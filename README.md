@@ -5,13 +5,17 @@ docker-flask
 
 
 ## About
-Docker-Flask is about Flask project organization and running it in a docker image.
+Docker-Flask is about Flask project organization and running it in a docker-compose containers.
+Application has a basic user model with authentication(passwords hashing), database migrations,
+administration interface, celery asynchronous tasks application, managing script,
+Bootstrap starter templates.
 
 
 
 ## Application scheme
 
-###Including the followings
+
+### Including the followings
 
 - Docker and Docker-Compose for managing project
 
@@ -23,7 +27,6 @@ Docker-Flask is about Flask project organization and running it in a docker imag
   - Flask-Login - [https://github.com/maxcountryman/flask-login](https://github.com/maxcountryman/flask-login)
   - Flask-Mail - [https://github.com/mattupstate/flask-mail](https://github.com/mattupstate/flask-mail)
   - Flask-Migrate - [https://github.com/miguelgrinberg/Flask-Migrate](https://github.com/miguelgrinberg/Flask-Migrate)
-  - Flask-Profiler - [https://github.com/muatik/flask-profiler](https://github.com/muatik/flask-profiler)
   - Flask-Script - [https://github.com/smurfix/flask-script](https://github.com/smurfix/flask-script)
   - Flask-SQLAlchemy - [https://github.com/mitsuhiko/flask-sqlalchemy](https://github.com/mitsuhiko/flask-sqlalchemy)
   - Flask-Testing - [https://github.com/jarus/flask-testing](https://github.com/jarus/flask-testing)

@@ -93,7 +93,9 @@ def install_secret_key(app, filename='secret_key'):
 @manager.command
 def runtests():
     """Run all tests"""
-    pass
+    import pytest
+    exit_code = pytest.main([TEST_PATH, '--verbose'])
+    return exit_code
 
 
 if __name__ == '__main__':

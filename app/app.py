@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+import os
+
 # Import Flask app, modules and extensions
 from flask import Flask
 from flask import g, render_template
@@ -19,7 +21,7 @@ from users.decorators import requires_login
 from users.views import users as users_blueprint
 from views import main_blueprint
 
-
+# For import *
 __all__ = ['create_app']
 
 DEFAULT_APP_NAME = 'flaskapp'
@@ -32,7 +34,10 @@ def create_app(package_name, package_path, settings_override=None,
 
     configure_app(app, settings_override)
 
+    configure_logging(app)
+
     register_database(app)
+    register_error_handlers(app)
     register_admin(app)
     register_extensions(app)
     register_blueprints(app)
@@ -51,7 +56,11 @@ def configure_app(app, config=None):
 
 def register_admin(app):
     """Register admin application."""
-    admin = Admin(app, index_view=MyAdminIndexView(), template_mode='bootstrap3')
+    admin = Admin(
+        app,
+        index_view=MyAdminIndexView(),
+        template_mode='bootstrap3'
+    )
     admin.add_view(UserView(User, db.session))
 
 
@@ -73,6 +82,49 @@ def register_blueprints(app):
     app.register_blueprint(users_blueprint, url_prefix='/users')
 
 
-# def register_jinjia_filters(app):
-#     app.jinja_env.filters['my_format_datetime'] = my_format_datetime
-#     app.jinja_env.filters['format_meta_keywords'] = format_meta_keywords
+def configure_logging(app):
+    """Configure file(info) and email(error) logging."""
+
+    import logging
+    from logging.handlers import SMTPHandler
+
+    # Set info level on logger, which might be overwritten by handers.
+    # Suppress DEBUG messages.
+    app.logger.setLevel(logging.INFO)
+
+    info_log = os.path.join(app.config['LOG_FOLDER'], 'info.log')
+    info_file_handler = logging.handlers.RotatingFileHandler(info_log, maxBytes=100000, backupCount=10)
+    info_file_handler.setLevel(logging.INFO)
+    info_file_handler.setFormatter(logging.Formatter(
+        '%(asctime)s %(levelname)s: %(message)s '
+        '[in %(pathname)s:%(lineno)d]')
+    )
+    app.logger.addHandler(info_file_handler)
+    if not app.config['DEBUG']:
+        mail_handler = SMTPHandler(app.config['MAIL_SERVER'],
+                                   app.config['MAIL_USERNAME'],
+                                   app.config['ADMINS'],
+                                   'O_ops... %s failed!' % app.config['PROJECT'],
+                                   (app.config['MAIL_USERNAME'],
+                                    app.config['MAIL_PASSWORD']))
+        mail_handler.setLevel(logging.ERROR)
+        mail_handler.setFormatter(logging.Formatter(
+            '%(asctime)s %(levelname)s: %(message)s '
+            '[in %(pathname)s:%(lineno)d]')
+        )
+        app.logger.addHandler(mail_handler)
+
+
+def register_error_handlers(app):
+
+    @app.errorhandler(403)
+    def forbidden_page(error):
+        return render_template("errors/forbidden_page.html"), 403
+
+    @app.errorhandler(404)
+    def page_not_found(error):
+        return render_template("errors/page_not_found.html"), 404
+
+    @app.errorhandler(500)
+    def server_error_page(error):
+        return render_template("errors/server_error.html"), 500
