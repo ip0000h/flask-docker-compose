@@ -7,8 +7,8 @@ docker-flask
 ## About
 Docker-Flask is about Flask project organization and running it in a docker-compose containers.
 Application has a basic user model with authentication(passwords hashing), database migrations,
-administration interface, celery asynchronous tasks application, managing script,
-Bootstrap starter templates.
+administration interface, celery asynchronous tasks application, manage script,
+debug toolbar, Bootstrap starter templates.
 
 
 
@@ -87,7 +87,7 @@ To run ipython debug flaskapp shell:
 
 To create admin user:
 
-- ```docker exec -it dockerflask_flaskapp_1 bash -c "python manage.py create_user -i"```
+- ```docker exec -it dockerflask_flaskapp_1 bash -c "python manage.py create_user -a"```
 
 
 ### Stop and destroy a cluster:

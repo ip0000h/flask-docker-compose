@@ -16,7 +16,7 @@ from extensions import (
     login_manager,
     mail
 )
-from models import User
+from users.models import User
 from users.decorators import requires_login
 from users.views import users as users_blueprint
 from views import main_blueprint

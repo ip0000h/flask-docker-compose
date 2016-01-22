@@ -4,7 +4,7 @@ import unittest
 from flask.ext.testing import TestCase
 
 from app import app, db
-from models import User
+from users.models import User
 
 
 class BaseTestCase(TestCase):

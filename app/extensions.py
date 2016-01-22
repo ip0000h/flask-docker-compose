@@ -5,7 +5,7 @@ from flask.ext.login import LoginManager
 from flask.ext.mail import Mail
 
 from database import db
-from models import User
+from users.models import User
 
 
 # Create a tolbar object

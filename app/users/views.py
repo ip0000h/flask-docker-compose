@@ -4,9 +4,9 @@ from flask import Blueprint, flash, redirect, render_template, request, url_for
 from flask.ext.login import login_user, logout_user
 
 from database import db
-from .decorators import requires_login
-from .forms import LoginForm, SignUpForm
-from .models import User
+from users.decorators import requires_login
+from users.forms import LoginForm, SignUpForm
+from users.models import User
 
 users = Blueprint('users', __name__)
 
@@ -27,7 +27,7 @@ def login():
 def logout():
     logout_user()
     flash("Successfully logged out", "success")
-    return redirect(url_for('.login'))
+    return redirect(url_for('users.login'))
 
 
 @users.route('/signup',methods=('GET','POST'))
@@ -55,5 +55,4 @@ def signup():
 
         return redirect(next_url)
 
-    print form.errors
     return render_template('signup.html',form=form)

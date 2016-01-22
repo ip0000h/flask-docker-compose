@@ -2,13 +2,13 @@
 
 import os
 import sys
+from flask.ext.migrate import Migrate, MigrateCommand
 from flask.ext.script import Manager, Server, prompt, prompt_bool, prompt_pass
 from flask.ext.script.commands import ShowUrls, Clean
-from flask.ext.migrate import Migrate, MigrateCommand
 
 from app import create_app
 from database import db
-from models import User
+from users.models import User
 
 app = create_app('manageapp', os.path.dirname(__file__))
 

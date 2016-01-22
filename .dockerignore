@@ -1,5 +1,4 @@
 .git
-app/log
 app/migrations
 app/settings/prod.py
 app/static
