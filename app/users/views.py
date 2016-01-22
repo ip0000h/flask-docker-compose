@@ -5,7 +5,7 @@ from flask.ext.login import login_user, logout_user
 
 from database import db
 from .decorators import requires_login
-from .forms import LoginForm
+from .forms import LoginForm, SignUpForm
 from .models import User
 
 users = Blueprint('users', __name__)
@@ -28,3 +28,32 @@ def logout():
     logout_user()
     flash("Successfully logged out", "success")
     return redirect(url_for('.login'))
+
+
+@users.route('/signup',methods=('GET','POST'))
+def signup():
+    if authutil.is_logined(request):
+        return redirect('/')
+
+    form = SignUpForm(next=request.values.get('next'))
+
+    if form.validate_on_submit():
+        username = form.username.data.encode('utf-8')
+        password = form.password.data.encode('utf-8')
+        email = form.email.data.encode('utf-8')
+
+        try:
+            user = backend.add_user(username,email,password)
+        except BackendError,ex:
+            flash('Registering error','error')
+            return render_template('signup.html',form=form)
+
+        next_url = form.next.data
+
+        if not next_url or next_url == request.path:
+            next_url = '/'
+
+        return redirect(next_url)
+
+    print form.errors
+    return render_template('signup.html',form=form)

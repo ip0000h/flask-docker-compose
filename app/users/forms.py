@@ -33,7 +33,7 @@ class LoginForm(Form):
         return True
 
 
-class RegisterForm(Form):
+class SignUpForm(Form):
     username = TextField('username', validators=[Required()])
     email = TextField('email address', [Required(), Email()])
     password = PasswordField('password', validators=[Required()])
@@ -42,7 +42,3 @@ class RegisterForm(Form):
         EqualTo('password', message='passwords must match')
         ])
     recaptcha = RecaptchaField()
-
-
-class ProfileForm(Form):
-    pass

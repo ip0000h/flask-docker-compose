@@ -6,12 +6,13 @@ from flask.ext.script import Manager, Server, prompt, prompt_bool, prompt_pass
 from flask.ext.script.commands import ShowUrls, Clean
 from flask.ext.migrate import Migrate, MigrateCommand
 
-
+from app import create_app
 from database import db
 from models import User
 
+app = create_app('manageapp', os.path.dirname(__file__))
 
-manager = Manager(create_app())
+manager = Manager(app)
 
 manager.add_command("server", Server())
 manager.add_command("show-urls", ShowUrls())
@@ -64,6 +65,7 @@ def create_user(admin=False):
         print("Error: Passwords don't match")
 
 
+@manager.command
 def install_secret_key(app, filename='secret_key'):
     """Configure the SECRET_KEY from a file
     in the instance directory.

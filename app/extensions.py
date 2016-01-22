@@ -20,5 +20,6 @@ login_manager.login_view = 'users.views.login_view'
 def load_user(userid):
     return db.session.query(User).get(userid)
 
+
 # Create a flask-mail object
 mail = Mail()
