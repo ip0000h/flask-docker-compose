@@ -27,7 +27,7 @@ postgresql:
   volumes:
     - ./dockerfiles/pgdata:/var/lib/postgresql/data/pgdata:rw
   ports:
-    - "5432:5432"
+    - "5432"
 
 redis:
   restart: always
@@ -36,11 +36,11 @@ redis:
   volumes:
     - redis/redis.conf:/usr/local/etc/redis/redis.conf
   ports:
-    - "6379:6379"
+    - "6379"
 
 postfix:
   restart: always
   image: catatnight/postfix:latest
   env_file: postfix/.env
   ports:
-    - "25:25"
+    - "25"

@@ -15,6 +15,7 @@ flaskapp:
     - postgresql
     - rabbitmq
     - redis
+    - postfix
   environment:
     - APP_ENVIRONMENT=PRODUCTION
     - FLASK_SETTINGS=settings/prod.py
@@ -26,21 +27,21 @@ postgresql:
   volumes:
     - ./dockerfiles/pgdata:/var/lib/postgresql/data/pgdata:rw
   ports:
-    - "5432:5432"
+    - "5432"
 
 rabbitmq:
   restart: always
   image: rabbitmq:latest
   env_file: rabbitmq/.env
   ports:
-    - "5672:5672"
+    - "5672"
 
 redis:
   restart: always
   image: redis:latest
   env_file: redis/.env
   ports:
-    - "6379:6379"
+    - "6379"
 
 nginx:
   restart: always

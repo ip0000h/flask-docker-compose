@@ -3,10 +3,11 @@ machine:
     - docker
 
 dependencies:
-  pre:
+  override:
     - sudo pip install -U docker-compose
 
 test:
   override:
     - docker-compose build flaskapp
     - docker-compose up -d
+    - docker-compose stop && docker-compose rm -f
