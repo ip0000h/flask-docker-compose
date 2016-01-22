@@ -4,11 +4,14 @@ docker-flask
 [![Circle CI](https://circleci.com/gh/ip0000h/docker-flask.svg?style=svg)](https://circleci.com/gh/ip0000h/docker-flask)
 
 
+## About
+Docker-Flask is about Flask project organization and running it in a docker image.
+
+
 
 ## Application scheme
 
-Including the followings:
-
+###Including the followings
 
 - Docker and Docker-Compose for managing project
 
@@ -81,7 +84,7 @@ To run ipython debug flaskapp shell:
 
 To create admin user:
 
-- ```docker exec -it dockerflask_flaskapp_1 bash -c "python manage.py create_user -i```
+- ```docker exec -it dockerflask_flaskapp_1 bash -c "python manage.py create_user -i"```
 
 
 ### Stop and destroy a cluster:

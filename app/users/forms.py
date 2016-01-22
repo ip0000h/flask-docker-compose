@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
 
-from flask.ext.wtf import Form, RecaptchaField
 from wtforms import TextField, PasswordField, BooleanField
 from wtforms.validators import Required, EqualTo, Email
 
+from flask.ext.wtf import Form, RecaptchaField
+
 from database import db
-from models import User
+from .models import User
 
 
 class LoginForm(Form):

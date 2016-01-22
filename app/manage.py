@@ -2,20 +2,31 @@
 
 import os
 import sys
-from flask.ext.script import Manager, prompt, prompt_bool, prompt_pass
+from flask.ext.script import Manager, Server, prompt, prompt_bool, prompt_pass
+from flask.ext.script.commands import ShowUrls, Clean
 from flask.ext.migrate import Migrate, MigrateCommand
 
-from app import app
+
 from database import db
 from models import User
 
-db.init_app(app)
+
+manager = Manager(create_app())
+
+manager.add_command("server", Server())
+manager.add_command("show-urls", ShowUrls())
+manager.add_command("clean", Clean())
 
 migrate = Migrate(app, db)
-
-manager = Manager(app)
-
 manager.add_command('db', MigrateCommand)
+
+
+@manager.shell
+def make_shell_context():
+    """ Create a python REPL with several default imports
+        in the context of the app
+    """
+    return dict(app=app, db=db, User=User)
 
 
 @manager.command

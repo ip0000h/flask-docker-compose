@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 
 from celery import Celery
-from flask.ext.mail import Mail, Message
 
-from app import app
+from tasks import *
 
-mail = Mail()
+
+celery = make_celery(create_app())
 
 
 def make_celery(app):
@@ -21,20 +21,3 @@ def make_celery(app):
                 return TaskBase.__call__(self, *args, **kwargs)
     celery.Task = ContextTask
     return celery
-
-celery = make_celery(app)
-
-
-@celery.task(bind=True, name='test', max_retries=None)
-def test(self):
-    with app.app_context():
-        return 'ok!'
-
-
-@celery.task(bind=True, name='send_email', max_retries=None)
-def send_email(self, email, theme, message):
-    with app.app_context():
-        msg = Message(theme, recipients=[email])
-        msg.body = message + u""" \n
-        """
-        return mail.send(msg)

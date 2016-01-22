@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 
-from flask.ext.bcrypt import check_password_hash, generate_password_hash
 from sqlalchemy import orm, types, Column
 from sqlalchemy.ext.declarative import declarative_base
+
+from flask.ext.bcrypt import check_password_hash, generate_password_hash
 
 
 Base = declarative_base()

@@ -3,72 +3,73 @@
 # Import Flask app, modules and extensions
 from flask import Flask
 from flask import g, render_template
-from flask_debugtoolbar import DebugToolbarExtension
-from flask_admin import Admin
-from flask.ext.login import current_user, LoginManager
+from flask.ext.admin import Admin
+from flask.ext.login import current_user
 
 # Import local modules
 from admin.views import UserView, MyAdminIndexView
 from database import db
+from extensions import (
+    debug_toolbar,
+    login_manager
+)
 from models import User
 from users.decorators import requires_login
 from users.views import users as users_blueprint
+from views import main_blueprint
 
 
-# Create a flask web app
-app = Flask(__name__)
+__all__ = ['create_app']
 
-# Load settings from base file
-app.config.from_object('settings.base')
-
-# Load settings from settings file
-if not app.config['TESTING']:
-    app.config.from_envvar('FLASK_SETTINGS')
-
-# Initialize db
-db.init_app(app)
-
-@app.before_request
-def before_request():
-    g.user = current_user
+DEFAULT_APP_NAME = 'flaskapp'
 
 
-# Index page
-@app.route('/')
-def index():
-    return render_template('index.html', page=u"It's working!")
+def create_app(config=None):
+    """Flask app factory."""
+    if app_name is None:
+        app_name = DEFAULT_APP_NAME
+
+    app = Flask(app_name)
+
+    configure_app(app, config)
+
+    register_database(app)
+    register_admin(app)
+    register_extensions(app)
+    register_blueprints(app)
+    print(app.url_map)
+
+    return app
 
 
-# Secret page
-@app.route('/secret')
-@requires_login
-def secret():
-    return render_template('index.html', page=u"Secret page!")
+def configure_app(app, config):
+    """Configure application."""
+    app.config.from_object('settings.base')
+    if config is not None:
+        if not app.config['TESTING']:
+            app.config.from_envvar('FLASK_SETTINGS')
+        else:
+            app.config.from_object('settings.testing')
 
 
-# Create and setup logger manager object
-login_manager = LoginManager()
-login_manager.init_app(app)
-login_manager.login_view = 'users.views.login_view'
+def register_admin(app):
+    """Register admin application."""
+    admin = Admin(app, index_view=MyAdminIndexView(), template_mode='bootstrap3')
+    admin.add_view(UserView(User, db.session))
 
 
-@login_manager.user_loader
-def load_user(userid):
-    return db.session.query(User).get(userid)
+def register_database(app):
+    """Register database."""
+    db.init_app(app)
 
 
-# Create a admin object
-admin = Admin(app, index_view=MyAdminIndexView(), template_mode='bootstrap3')
-# Add views to admin object
-admin.add_view(UserView(User, db.session))
-
-# Register blueprint for users app
-app.register_blueprint(users_blueprint, url_prefix='/users')
-
-# Create a tolbar object
-toolbar = DebugToolbarExtension(app)
+def register_extensions(app):
+    """Register all extensions."""
+    login_manager.init_app(app)
+    debug_toolbar.init_app(app)
 
 
-# Run appliation in debug mode
-if __name__ == '__main__':
-    app.run(debug=app.config['DEBUG'], host=app.config['HOST'])
+def register_blueprints(app):
+    """Register all blueprints."""
+    app.register_blueprint(main_blueprint)
+    app.register_blueprint(users_blueprint, url_prefix='/users')
