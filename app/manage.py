@@ -14,13 +14,16 @@ app = create_app('manageapp', os.path.dirname(__file__))
 
 manager = Manager(app)
 
-manager.add_command("server", Server())
 manager.add_command("show-urls", ShowUrls())
 manager.add_command("clean", Clean())
 
 migrate = Migrate(app, db)
 manager.add_command('db', MigrateCommand)
 
+manager.add_command("runserver",
+    Server(host='0.0.0.0',
+        port=5000,
+        use_debugger=True))
 
 @manager.shell
 def make_shell_context():

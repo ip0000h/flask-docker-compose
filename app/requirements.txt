@@ -1,6 +1,7 @@
 # Flask and Flask extensions
 Flask
 Flask-Admin
+Flask-Babel
 Flask-Bcrypt
 Flask-DebugToolbar
 Flask-Login

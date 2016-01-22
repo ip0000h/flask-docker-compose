@@ -22,7 +22,9 @@ CELERY_ACCEPT_CONTENT = ['pickle', 'json', 'msgpack', 'yaml']
 MAIL_SERVER = 'postfix'
 MAIL_PORT = 25
 MAIL_USE_TLS = False
-MAIL_USERNAME = 'support@postfix'
+MAIL_USERNAME = 'postfix'
+MAIL_PASSWORD = 'postfix'
+MAIL_DEFAULT_SENDER = 'support@postfix'
 
 RECAPTCHA_USE_SSL = False
 RECAPTCHA_PUBLIC_KEY = '<replace with a captcha public key>'
