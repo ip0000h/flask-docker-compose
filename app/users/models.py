@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from flask.ext.bcrypt import check_password_hash, generate_password_hash
-from sqlalchemy import types, Column
+from sqlalchemy import orm, types, Column
 from sqlalchemy.ext.declarative import declarative_base
 
 
@@ -47,7 +47,7 @@ class User(Base):
         self._password = generate_password_hash(password)
 
     # Hide password encryption by exposing password field only.
-    password = types.synonym('_password',
+    password = orm.synonym('_password',
                           descriptor=property(_get_password,
                                               _set_password))
 
