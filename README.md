@@ -5,10 +5,11 @@ docker-flask
 
 
 ## About
+
 Docker-Flask is about Flask project organization and running it in a docker-compose containers.
 Application has a basic user model with authentication(passwords hashing), database migrations,
-administration interface, celery asynchronous tasks application, manage script,
-debug toolbar, Bootstrap starter templates.
+administration interface, celery asynchronous tasks, manage script,
+debug toolbar, bootstrap starter templates.
 
 
 
@@ -21,6 +22,7 @@ debug toolbar, Bootstrap starter templates.
 
 
 - [Flask](https://github.com/mitsuhiko/flask) application running on uwsgi with next extensions:
+
   - Flask-Admin - [https://github.com/flask-admin/flask-admin](https://github.com/flask-admin/flask-admin)
   - Flask-Bcrypt - [https://github.com/maxcountryman/flask-bcrypt](https://github.com/maxcountryman/flask-bcrypt)
   - Flask-DebugToolbar - [https://github.com/mgood/flask-debugtoolbar](https://github.com/mgood/flask-debugtoolbar)
@@ -33,22 +35,25 @@ debug toolbar, Bootstrap starter templates.
   - Flask-WTF - [https://github.com/lepture/flask-wtf](https://github.com/lepture/flask-wtf)
 
 
-- [Celery](http://www.celeryproject.org/install/) application
+- [Celery](http://www.celeryproject.org/install/) python async tasks application
 
 
 - [Supervisor](http://supervisord.org/) for managing python applications
 
 
-- [PostgreSQL](http://www.postgresql.org/) database
+- [PostgreSQL](http://www.postgresql.org/) object-relational database
 
 
-- [Nginx](http://nginx.org/) frontend server for production mode(for production only)
+- [Nginx](http://nginx.org/) frontend web server for production mode(for production only)
 
 
-- [Redis](http://redis.io/) server
+- [Redis](http://redis.io/) key-value storage server
 
 
 - [RabbitMQ](http://www.rabbitmq.com/) server(for production only)
+
+
+- [Postfix](http://www.postfix.org/) smtp mail server
 
 
 
@@ -74,7 +79,8 @@ To start applications with development environment:
 - ```docker-compose up -d```
 
 To start applications with production environment(first copy configuration file and edit it)
-- ```docker-compose run --rm flaskapp cp settings/prod.py.repl settings/prod.py```
+
+- ```cp app/settings/prod.py.repl app/settings/prod.py```
 - ```docker-compose --file docker-compose.prod.yml up -d```
 
 To initialize, create migration and upgrade your database:
@@ -92,13 +98,7 @@ To create admin user:
 
 ### Stop and destroy a cluster:
 
-To stop applications with development environment:
-
 - ```docker-compose stop && docker-compose rm -f```
-
-To stop applications with production environment:
-
-- ```docker-compose --file docker-compose.prod.yml stop && docker-compose --file docker-compose.prod.yml rm -f```
 
 
 ### Logs and troubleshooting:
@@ -115,7 +115,3 @@ Access the application containers shell:
 ### Running tests:
 
 - ```docker exec -it dockerflask_flaskapp_1 bash -c "python manage.py runtests"```
-
-
-
-[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/ip0000h/docker-flask/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
