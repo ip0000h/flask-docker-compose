@@ -1,7 +1,9 @@
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 import os
 import sys
+
 from flask.ext.migrate import Migrate, MigrateCommand
 from flask.ext.script import Manager, Server, prompt, prompt_bool, prompt_pass
 from flask.ext.script.commands import ShowUrls, Clean
@@ -21,9 +23,10 @@ migrate = Migrate(app, db)
 manager.add_command('db', MigrateCommand)
 
 manager.add_command("runserver",
-    Server(host='0.0.0.0',
-        port=5000,
-        use_debugger=True))
+                    Server(host='0.0.0.0',
+                           port=5000,
+                           use_debugger=True))
+
 
 @manager.shell
 def make_shell_context():
@@ -43,8 +46,8 @@ def create_db():
 def drop_db():
     """Drop all database"""
     if prompt_bool(
-        "Are you sure you want to lose all your data"):
-            db.drop_all()
+            "Are you sure you want to lose all your data"):
+        db.drop_all()
 
 
 @manager.command
@@ -93,9 +96,9 @@ def install_secret_key(app, filename='secret_key'):
 @manager.command
 def runtests():
     """Run all tests"""
-    import pytest
-    exit_code = pytest.main([TEST_PATH, '--verbose'])
-    return exit_code
+    import unittest
+    tests = unittest.TestLoader().discover('tests')
+    unittest.TextTestRunner(verbosity=2).run(tests)
 
 
 if __name__ == '__main__':

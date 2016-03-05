@@ -1,26 +1,53 @@
 # -*- coding: utf-8 -*-
 
+from datetime import datetime
 from sqlalchemy import orm, types
 
 from flask.ext.bcrypt import check_password_hash, generate_password_hash
+from flask.ext.login import UserMixin
 
 
-from database import db
+from database import db, TimestampMixin
 
 
-class User(db.Model):
+class Role(db.Model):
+    """User role model class"""
+
+    __tablename__ = 'roles'
+    id = db.Column(types.Integer, primary_key=True)
+    name = db.Column(types.String(80), unique=True, nullable=False)
+    user_id = db.reference_col('users', nullable=True)
+    user = db.relationship('User', backref='roles')
+
+    def __init__(self, name, **kwargs):
+        db.Model.__init__(self, name=name, **kwargs)
+
+    def __repr__(self):
+        return '<Role {0}>'.format(self.name)
+
+    def get_id(self):
+        return str(self.id)
+
+
+class User(db.Model, TimestampMixin, UserMixin):
+    """User model class"""
+
     __tablename__ = 'users'
     id = db.Column(types.Integer, primary_key=True)
     username = db.Column(types.String(50), unique=True, nullable=False)
-    email = db.Column(types.String(50), unique=True, nullable=True)
-    is_active = db.Column(types.Boolean, nullable=False, default=True)
-    is_admin = db.Column(types.Boolean, nullable=False, default=False)
+    email = db.Column(types.String(50), unique=True, nullable=False)
     _password = db.Column('password', types.String(64), nullable=False)
+    is_active = db.Column(types.Boolean, nullable=False, default=True)
+    last_login = db.Column(types.DateTime(timezone=True),
+                           onupdate=datetime.utcnow())
 
-    def __init__(self, username, password, email=None):
-        self.username = username
-        self._set_password(password)
-        self.email = email
+    def __init__(self, username, email, password=None, **kwargs):
+        """Create instance."""
+        db.Model.__init__(self, username=username, email=email, **kwargs)
+        if password:
+            self.set_password(password)
+        else:
+            self.password = None
 
     def __repr__(self):
         return '<User {0}>'.format(self.username)
@@ -30,9 +57,6 @@ class User(db.Model):
 
     def is_active(self):
         return self.is_active
-
-    def is_admin(self):
-        return self.is_admin
 
     def is_anonymous(self):
         return False
@@ -48,8 +72,8 @@ class User(db.Model):
 
     # Hide password encryption by exposing password field only.
     password = orm.synonym('_password',
-                          descriptor=property(_get_password,
-                                              _set_password))
+                           descriptor=property(_get_password,
+                                               _set_password))
 
     def check_password(self, password):
         if self.password is None:

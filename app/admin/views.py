@@ -1,20 +1,23 @@
 # -*- coding: utf-8 -*-
 
+import psutil
+
 from flask import request, redirect, url_for
+from flask.ext.admin import expose
 from flask.ext.admin.base import AdminIndexView
 from flask.ext.admin.contrib.sqla import ModelView
 from flask.ext.login import current_user
 
 
-class UserView(ModelView):
-    """User model view for admin."""
-    can_delete = False
-    # Don't display the password on the list of Users
-    column_exclude_list = ('password',)
-    # Don't include the standard password field when creating or editing a User
-    form_excluded_columns = ('password',)
-    # Automatically display human-readable names
-    column_auto_select_related = True
+class MyAdminIndexView(AdminIndexView):
+    """Create customized index view class that handles login & registration."""
+    @expose('/')
+    def index(self):
+        memory_sysinfo = psutil.virtual_memory()
+        cpu_sysinfo = psutil.cpu_times_percent()
+        return self.render('admin/index.html',
+                           cpu_sysinfo=cpu_sysinfo,
+                           memory_sysinfo=memory_sysinfo)
 
     def is_accessible(self):
         return current_user.is_authenticated
@@ -23,8 +26,12 @@ class UserView(ModelView):
         return redirect(url_for('users.login', next=request.url))
 
 
-class MyAdminIndexView(AdminIndexView):
-    """Create customized index view class that handles login & registration."""
+class AdminUserView(ModelView):
+    """User model view for admin."""
+    can_delete = False
+    column_list = ('username', 'email', 'password', 'last_login', 'created_at')
+    column_searchable_list = ('username', 'email')
+
     def is_accessible(self):
         return current_user.is_authenticated
 

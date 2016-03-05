@@ -3,13 +3,11 @@
 import os
 
 # Import Flask app, modules and extensions
-from flask import Flask
-from flask import g, render_template
+from flask import Flask, render_template
 from flask.ext.admin import Admin
-from flask.ext.login import current_user
 
 # Import local modules
-from admin.views import UserView, MyAdminIndexView
+from admin.views import AdminUserView, MyAdminIndexView
 from database import db
 from extensions import (
     debug_toolbar,
@@ -17,7 +15,6 @@ from extensions import (
     mail
 )
 from users.models import User
-from users.decorators import requires_login
 from users.views import users as users_blueprint
 from views import main_blueprint
 
@@ -27,8 +24,10 @@ __all__ = ['create_app']
 DEFAULT_APP_NAME = 'flaskapp'
 
 
-def create_app(package_name, package_path, settings_override=None,
-                register_security_blueprint=True):
+def create_app(package_name,
+               package_path,
+               settings_override=None,
+               register_security_blueprint=True):
     """Flask app factory."""
     app = Flask(package_name, instance_relative_config=False)
 
@@ -61,7 +60,7 @@ def register_admin(app):
         index_view=MyAdminIndexView(),
         template_mode='bootstrap3'
     )
-    admin.add_view(UserView(User, db.session))
+    admin.add_view(AdminUserView(User, db.session))
 
 
 def register_database(app):
@@ -93,7 +92,8 @@ def configure_logging(app):
     app.logger.setLevel(logging.INFO)
 
     info_log = os.path.join(app.config['LOG_FOLDER'], 'info.log')
-    info_file_handler = logging.handlers.RotatingFileHandler(info_log, maxBytes=100000, backupCount=10)
+    info_file_handler = logging.handlers.RotatingFileHandler(
+        info_log, maxBytes=100000, backupCount=10)
     info_file_handler.setLevel(logging.INFO)
     info_file_handler.setFormatter(logging.Formatter(
         '%(asctime)s %(levelname)s: %(message)s '
@@ -104,7 +104,8 @@ def configure_logging(app):
         mail_handler = SMTPHandler(app.config['MAIL_SERVER'],
                                    app.config['MAIL_USERNAME'],
                                    app.config['ADMINS'],
-                                   'O_ops... %s failed!' % app.config['PROJECT'],
+                                   'O_ops... %s failed!' % app.config[
+                                       'PROJECT'],
                                    (app.config['MAIL_USERNAME'],
                                     app.config['MAIL_PASSWORD']))
         mail_handler.setLevel(logging.ERROR)
