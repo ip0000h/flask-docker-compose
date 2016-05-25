@@ -16,6 +16,7 @@ debug_toolbar = DebugToolbarExtension()
 login_manager = LoginManager()
 login_manager.login_view = 'users.views.login_view'
 
+
 @login_manager.user_loader
 def load_user(userid):
     return db.session.query(User).get(userid)

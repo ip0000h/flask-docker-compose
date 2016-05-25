@@ -1,9 +1,5 @@
 flaskapp:
   build: ./
-  env_file: .env
-  dns:
-    - 8.8.8.8
-    - 9.9.9.9
   working_dir: /var/www/app
   command: bash -c "supervisord -c /etc/supervisord.conf"
   volumes:

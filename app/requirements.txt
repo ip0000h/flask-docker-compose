@@ -17,5 +17,6 @@ coverage
 ipython
 psycopg2
 redis
+psutil
 supervisor
 uwsgi

@@ -6,7 +6,7 @@ SECRET_KEY = '<replace with a secret key>'
 HOST = '0.0.0.0'
 PORT = 5000
 
-LOG_FOLDER='/tmp/'
+LOG_FOLDER = '/tmp/'
 
 SQLALCHEMY_DATABASE_URI = 'postgresql://flask:flask@postgresql/flask'
 SQLALCHEMY_ECHO = True

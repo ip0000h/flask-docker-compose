@@ -41,6 +41,7 @@ COV = coverage.coverage(
 )
 COV.start()
 
+
 @manager.shell
 def make_shell_context():
     """ Create a python REPL with several default imports
