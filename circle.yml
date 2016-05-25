@@ -12,5 +12,4 @@ test:
     - docker-compose pull
     - docker-compose up -d
   override:
-    - docker-compose run flaskapp bash -c "python manage.py test"
     - docker-compose stop
