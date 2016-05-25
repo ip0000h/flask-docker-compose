@@ -12,5 +12,5 @@ test:
     - docker-compose pull
     - docker-compose up -d
   override:
-    - docker exec -it dockerflask_flaskapp_1 bash -c "python manage.py runtests"
-    - docker-compose stop && docker-compose rm -f
+    - docker-compose run flaskapp bash -c "python manage.py runtests"
+    - docker-compose stop
