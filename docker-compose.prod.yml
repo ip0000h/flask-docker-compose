@@ -11,7 +11,6 @@ flaskapp:
     - postgresql
     - rabbitmq
     - redis
-    - postfix
   environment:
     - APP_ENVIRONMENT=PRODUCTION
     - FLASK_SETTINGS=settings/prod.py
@@ -36,6 +35,9 @@ redis:
   restart: always
   image: redis:latest
   env_file: redis/.env
+  volumes:
+    - ./redis/redis.conf:/data/redis.conf:ro
+  command: redis-server /data/redis.conf
   ports:
     - "6379"
 
@@ -49,11 +51,3 @@ nginx:
     - ./app/run/uwsgi:/var/run/uwsgi:ro
   ports:
     - "80:80"
-
-postfix:
-  restart: always
-  image: catatnight/postfix:latest
-  env_file: postfix/.env
-  ports:
-    - "25:25"
-    - "587:587"

@@ -8,7 +8,7 @@ from flask import Flask, render_template
 from flask.ext.admin import Admin
 
 # Import local modules
-from admin.views import AdminUserView, MyAdminIndexView
+from admin.views import AdminUserView
 from database import db
 from extensions import (
     debug_toolbar,
@@ -58,7 +58,6 @@ def register_admin(app):
     """Register admin application."""
     admin = Admin(
         app,
-        index_view=MyAdminIndexView(),
         template_mode='bootstrap3'
     )
     admin.add_view(AdminUserView(User, db.session))

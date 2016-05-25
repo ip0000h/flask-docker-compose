@@ -9,26 +9,6 @@ from flask.ext.login import UserMixin
 
 from database import db, TimestampMixin
 
-
-class Role(db.Model):
-    """User role model class"""
-
-    __tablename__ = 'roles'
-    id = db.Column(types.Integer, primary_key=True)
-    name = db.Column(types.String(80), unique=True, nullable=False)
-    user_id = db.reference_col('users', nullable=True)
-    user = db.relationship('User', backref='roles')
-
-    def __init__(self, name, **kwargs):
-        db.Model.__init__(self, name=name, **kwargs)
-
-    def __repr__(self):
-        return '<Role {0}>'.format(self.name)
-
-    def get_id(self):
-        return str(self.id)
-
-
 class User(db.Model, TimestampMixin, UserMixin):
     """User model class"""
 
@@ -67,13 +47,13 @@ class User(db.Model, TimestampMixin, UserMixin):
     def _get_password(self):
         return self._password
 
-    def _set_password(self, password):
+    def set_password(self, password):
         self._password = generate_password_hash(password)
 
     # Hide password encryption by exposing password field only.
     password = orm.synonym('_password',
                            descriptor=property(_get_password,
-                                               _set_password))
+                                               set_password))
 
     def check_password(self, password):
         if self.password is None:

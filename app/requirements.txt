@@ -14,7 +14,7 @@ Flask-WTF
 # Database and System
 celery
 coverage
-ipython
+bpython
 psycopg2
 redis
 psutil

@@ -2,7 +2,7 @@
 
 from functools import wraps
 
-from flask import abort
+from flask import abort, redirect, request, url_for
 from flask.ext.login import current_user
 
 
@@ -16,9 +16,9 @@ def admin_required(f):
 
 
 def requires_login(f):
-  @wraps(f)
-  def decorated_function(*args, **kwargs):
-    if current_user is None:
-      return redirect(url_for('.login', next=request.path))
-    return f(*args, **kwargs)
-  return decorated_function
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if current_user is None:
+            return redirect(url_for('.login', next=request.path))
+        return f(*args, **kwargs)
+    return decorated_function

@@ -52,15 +52,16 @@ mode
 
 -   [RabbitMQ](http://www.rabbitmq.com/) AMPQ server(for production only)
 
-
--   [Postfix](http://www.postfix.org/) SMTP mail server
-
 ## Pre-Build
 
 -   install docker [https://github.com/docker/docker](https://github.com/docker/docker)
 -   install docker-compose [https://docs.docker.com/compose/install](https://docs.docker.com/compose/install)
 
 ## Usage
+
+### Pull images
+
+-   ```docker-compose pull```
 
 ### Build an image
 
