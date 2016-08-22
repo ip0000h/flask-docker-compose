@@ -15,8 +15,8 @@ Flask-WTF
 celery
 coverage
 bpython
+gunicorn
 psycopg2
 redis
 psutil
 supervisor
-uwsgi
