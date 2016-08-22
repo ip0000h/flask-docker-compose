@@ -9,7 +9,7 @@ docker-compose containers.
 Application has a basic user model with authentication(passwords hashing),
 database migrations,
 administration interface, celery asynchronous tasks, manage script,
-debug toolbar, bootstrap starter templates.
+debug toolbar, bootstrap starter templates. Example project using this skeleton: [Taskman](https://github.com/ip0000h/taskman)
 
 ## Application scheme
 
