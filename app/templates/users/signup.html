@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<!-- extend base layout -->
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+<div class="row">
+<div class="col-md-offset-2 col-md-8 col-md-offset-2">
+<form class="form-signup" action="" method="post" name="signup">
+<h2 class="form-signup-heading">Register with e-mail</h2>
+    {{form.hidden_tag()}}
+    <p>
+        {{form.email}}
+    </p>
+    <p>
+        {{form.password}}
+    </p>
+    <p>
+        {{form.confirm}}
+    </p>
+    <p>
+        {{form.recaptcha(class="form-control")}}
+        {% with messages = get_flashed_messages() %}
+          {% if messages %}
+            <ul class="flashes">
+            {% for message in messages %}
+              <li class="{{ category }}">{{ message }}</li>
+            {% endfor %}
+            </ul>
+          {% endif %}
+        {% endwith %}
+    </p>
+    {{ form.csrf_token }}
+    <p><button class="btn btn-lg btn-primary btn-block" type="submit" id="submit">Register</button></p>
+    <a href="/login" class="noscript">Sign in to your existing account?</a>
+</form>
+</div>
+</div>
+</div>
+{% endblock %}

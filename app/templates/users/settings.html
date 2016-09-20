@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<!-- extend base layout -->
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+<div class="row">
+<div class="col-md-offset-3 col-md-6 col-md-offset-3">
+<h2 class="text-center form-settings-heading">User settings</h2>
+<form id="settings-form" class="form-horizontal form-settings" action="" method="post" name="user_settings">
+    {{form.hidden_tag()}}
+    <p>
+        {{form.email}}
+    </p>
+    <p>
+        {{form.phone}}
+    </p>
+    <p>
+        {{form.use2factor_auth}}
+    </p>
+    <p>
+        {{form.password}}
+    </p>
+    <p>
+        {{form.new_password}}
+    </p>
+    <p>
+        {{form.confirm}}
+    </p>
+    <p>
+        {{form.recaptcha(class="form-control")}}
+        {% with messages = get_flashed_messages() %}
+          {% if messages %}
+            <ul class="flashes">
+            {% for message in messages %}
+              <li class="{{ category }}">{{ message }}</li>
+            {% endfor %}
+            </ul>
+          {% endif %}
+        {% endwith %}
+    </p>
+    {{ form.csrf_token }}
+    <p><button class="btn btn-lg btn-primary btn-block" type="submit" id="submit">Save</button></p>
+</form>
+</div>
+</div>
+</div>
+{% endblock %}

@@ -28,6 +28,7 @@ users = Blueprint('users', __name__)
 
 @users.route('/login', methods=['GET', 'POST'])
 def login():
+    error = None
     form = LoginForm()
     if request.method == 'POST' and form.validate_on_submit():
         user = db.session.query(Client).get(form.user.id)
@@ -40,7 +41,7 @@ def login():
             app.logger.debug("Login failed.")
             flash(u"Login failed.", 'error')
             return redirect(url_for('users.login'))
-    return render_template('users/login.html', form=form)
+    return render_template('users/login.html', form=form, error=error)
 
 
 @users.route('/logout')
@@ -51,37 +52,35 @@ def logout():
     flash(u"You were logged out", 'success')
     return redirect(url_for('users.login'))
 
+
 @users.route('/signup', methods=('GET', 'POST'))
 def signup():
     form = SignUpForm()
+    session.pop('client_id', None)
     if request.method == 'POST' and form.validate_on_submit():
-        try:
-            client_id = session['client_id']
-            user = Client.query.get(client_id)
-            if user.email:
-                session['client_id'] = None
-                raise
-            user.email = form.email.data
-            user.set_password(form.password.data)
-            if request.headers.getlist("X-Forwarded-For"):
-                ip = request.headers.getlist("X-Forwarded-For")[0]
-            elif request.headers.get("X-Real-IP"):
-                ip = request.headers.get("X-Real-IP")
-            else:
-                ip = request.remote_addr
-            user.first_ip = ip
-        except:
-            check_user = Client.query.filter_by(email=form.email.data).one()
-            if check_user:
-                app.logger.debug(
-                    "Email {0} already exist in the database.".format(
-                        form.email.data))
-            user = Client(form.email.data, form.password.data)
+        app.logger.debug("Email: {0}".format(form.email.data))
+        check_user = Client.query.filter_by(email=form.email.data).first()
+        print(check_user)
+        if check_user:
+            app.logger.debug(
+                "Email {0} already exist in the database.".format(
+                    form.email.data))
+            msg = u"""
+                User with email {0} already exist.
+            """
+            flash(msg, 'error')
+            return redirect(url_for('users.signup'))
+        user = Client(form.email.data, form.password.data)
+        user.email = form.email.data
+        user.set_password(form.password.data)
+        if request.headers.getlist("X-Forwarded-For"):
+            ip = request.headers.getlist("X-Forwarded-For")[0]
+        elif request.headers.get("X-Real-IP"):
+            ip = request.headers.get("X-Real-IP")
+        else:
+            ip = request.remote_addr
+        user.first_ip = ip
         db.session.add(user)
-        db.session.commit()
-        app.logger.debug(
-            "User id: {0} email: {1}".format(
-                user.id, user.email))
         # Now we'll send the email confirmation link
         try:
             ts = URLSafeTimedSerializer(app.config["SECRET_KEY"])
@@ -104,6 +103,7 @@ def signup():
         """
         app.logger.debug("New account was successfully created.")
         flash(msg, 'success')
+        db.session.commit()
         return redirect(url_for('users.login'))
     return render_template('users/signup.html', form=form)
 
@@ -112,23 +112,38 @@ def signup():
 @requires_login
 def settings():
     form = SettingsForm()
-    user = db.session.query(Client).get(current_user.get_id())
+    try:
+        user = db.session.query(Client).get(current_user.get_id())
+    except TypeError:
+        abort(404)
     if request.method == 'POST' and form.validate_on_submit():
         if user.check_password(form.password.data):
+            error = False
+            if not(user.email == form.email.data) and \
+               not Client.query.filter_by(email=form.email.data).scalar():
+                flash(u"This email already exist.", 'error')
+                error = True
+            if not(user.phone == form.phone.data) and \
+               Client.query.filter_by(phone=form.phone.data).scalar():
+                flash(u"This phone already exist.", 'error')
+                error = True
             user.email = form.email.data
             user.phone = form.phone.data
             new_password = form.new_password.data
             confirm = form.confirm.data
             if new_password and confirm and new_password == confirm:
                 user.set_password(new_password)
-            db.session.add(user)
-            db.session.commit()
-            app.logger.debug("Settings was saved.")
-            flash(u"Your changes have been saved.", 'success')
+            elif new_password and confirm:
+                flash(u"Passwords don't match.", 'error')
+            error = True
+            if not error:
+                db.session.add(user)
+                db.session.commit()
+                flash(u"Your changes have been saved.", 'success')
             return redirect(url_for('users.settings'))
         else:
-            app.logger.debug("Wrong password!")
             flash(u"Please, check password again.", 'error')
+            return redirect(url_for('users.settings'))
     else:
         form.email.data = user.email
         form.phone.data = user.phone
