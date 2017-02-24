@@ -7,9 +7,9 @@ import unittest
 
 import coverage
 
-from flask.ext.migrate import Migrate, MigrateCommand
-from flask.ext.script import Manager, Server, prompt, prompt_bool, prompt_pass
-from flask.ext.script.commands import Clean, ShowUrls
+from flask_migrate import Migrate, MigrateCommand
+from flask_script import Manager, Server, prompt, prompt_bool, prompt_pass
+from flask_script.commands import Clean, ShowUrls
 
 from app import create_app
 from database import db

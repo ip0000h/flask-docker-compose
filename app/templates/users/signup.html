@@ -18,7 +18,6 @@
         {{form.confirm}}
     </p>
     <p>
-        {{form.recaptcha(class="form-control")}}
         {% with messages = get_flashed_messages() %}
           {% if messages %}
             <ul class="flashes">
@@ -31,7 +30,7 @@
     </p>
     {{ form.csrf_token }}
     <p><button class="btn btn-lg btn-primary btn-block" type="submit" id="submit">Register</button></p>
-    <a href="/login" class="noscript">Sign in to your existing account?</a>
+    <a href="{{url_for('users.login')}}" class="noscript">Sign in to your existing account?</a>
 </form>
 </div>
 </div>

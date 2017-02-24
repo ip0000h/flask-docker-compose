@@ -4,13 +4,13 @@
 from wtforms import TextField, PasswordField, BooleanField
 from wtforms.validators import DataRequired, EqualTo, Email, Length
 
-from flask_wtf import Form, RecaptchaField
+from flask_wtf import FlaskForm, RecaptchaField
 
 from database import db
 from users.models import User
 
 
-class EmailForm(Form):
+class EmailForm(FlaskForm):
     """Email form for reset password."""
     email = TextField(
         u'Email',
@@ -18,7 +18,7 @@ class EmailForm(Form):
     )
 
 
-class PasswordForm(Form):
+class PasswordForm(FlaskForm):
     """Password form."""
     password = PasswordField(
         u'Password',
@@ -33,7 +33,7 @@ class PasswordForm(Form):
     )
 
 
-class LoginForm(Form):
+class LoginForm(FlaskForm):
     """Login form."""
     email = TextField(
         u'Email',
@@ -50,11 +50,11 @@ class LoginForm(Form):
 
     def validate(self):
         """Validate the form."""
-        rv = Form.validate(self)
+        rv = FlaskForm.validate(self)
         if not rv:
             return False
 
-        user = db.session.query(Client).filter_by(
+        user = db.session.query(User).filter_by(
             email=self.email.data).first()
 
         if user is None:
@@ -70,7 +70,7 @@ class LoginForm(Form):
         return True
 
 
-class SignUpForm(Form):
+class SignUpForm(FlaskForm):
     """Registration user form."""
     email = TextField(
         u'Email',
@@ -91,11 +91,11 @@ class SignUpForm(Form):
 
     def validate(self):
         """Validate the form."""
-        rv = Form.validate(self)
+        rv = FlaskForm.validate(self)
         if not rv:
             return False
 
-        user = db.session.query(Client).filter_by(
+        user = db.session.query(User).filter_by(
             email=self.email.data).first()
         if user:
             self.email.errors.append('Email already registered.')
@@ -104,7 +104,7 @@ class SignUpForm(Form):
         return True
 
 
-class SettingsForm(Form):
+class SettingsForm(FlaskForm):
     """User settings form."""
     email = TextField(
         u'Email',
@@ -139,7 +139,7 @@ class SettingsForm(Form):
 
     def validate(self):
         """Validate the form."""
-        rv = Form.validate(self)
+        rv = FlaskForm.validate(self)
         if not rv:
             return False
 

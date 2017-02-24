@@ -27,8 +27,3 @@ MAIL_USE_TLS = False
 MAIL_USERNAME = 'postfix'
 MAIL_PASSWORD = 'postfix'
 MAIL_DEFAULT_SENDER = 'support@postfix'
-
-RECAPTCHA_USE_SSL = False
-RECAPTCHA_PUBLIC_KEY = '<replace with a captcha public key>'
-RECAPTCHA_PRIVATE_KEY = 'replace with a captcha private key'
-RECAPTCHA_OPTIONS = {'theme': 'white'}

@@ -31,7 +31,7 @@ def login():
     error = None
     form = LoginForm()
     if request.method == 'POST' and form.validate_on_submit():
-        user = db.session.query(Client).get(form.user.id)
+        user = db.session.query(User).get(form.user.id)
         if user.check_password(form.password.data):
             login_user(user)
             session['client_id'] = user.id
@@ -59,7 +59,7 @@ def signup():
     session.pop('client_id', None)
     if request.method == 'POST' and form.validate_on_submit():
         logging.debug("Email: {0}".format(form.email.data))
-        check_user = Client.query.filter_by(email=form.email.data).first()
+        check_user = User.query.filter_by(email=form.email.data).first()
         print(check_user)
         if check_user:
             logging.debug(
@@ -70,7 +70,7 @@ def signup():
             """
             flash(msg, 'error')
             return redirect(url_for('users.signup'))
-        user = Client(form.email.data, form.password.data)
+        user = User(form.email.data, form.password.data)
         user.email = form.email.data
         user.set_password(form.password.data)
         if request.headers.getlist("X-Forwarded-For"):
@@ -113,18 +113,18 @@ def signup():
 def settings():
     form = SettingsForm()
     try:
-        user = db.session.query(Client).get(current_user.get_id())
+        user = db.session.query(User).get(current_user.get_id())
     except TypeError:
         abort(404)
     if request.method == 'POST' and form.validate_on_submit():
         if user.check_password(form.password.data):
             error = False
             if not(user.email == form.email.data) and \
-               not Client.query.filter_by(email=form.email.data).scalar():
+               not User.query.filter_by(email=form.email.data).scalar():
                 flash(u"This email already exist.", 'error')
                 error = True
             if not(user.phone == form.phone.data) and \
-               Client.query.filter_by(phone=form.phone.data).scalar():
+               User.query.filter_by(phone=form.phone.data).scalar():
                 flash(u"This phone already exist.", 'error')
                 error = True
             user.email = form.email.data
@@ -159,7 +159,7 @@ def confirm_email(token):
         logging.error(e)
         abort(404)
     logging.debug("Token: {0} email: {1}".format(token, email))
-    user = Client.query.filter_by(email=email).first_or_404()
+    user = User.query.filter_by(email=email).first_or_404()
     user.active = True
     user.confirmed_date = datetime.utcnow()
     db.session.add(user)
@@ -177,7 +177,7 @@ def confirm_email(token):
 def reset():
     form = EmailForm()
     if request.method == 'POST' and form.validate_on_submit():
-        user = Client.query.filter_by(email=form.email.data).first_or_404()
+        user = User.query.filter_by(email=form.email.data).first_or_404()
         logging.debug(
             "Password reset request from {0}".format(
                 user.email))
@@ -218,7 +218,7 @@ def reset_with_token(token):
         abort(404)
     form = PasswordForm()
     if request.method == 'POST' and form.validate_on_submit():
-        user = Client.query.filter_by(email=email).first_or_404()
+        user = User.query.filter_by(email=email).first_or_404()
         user.set_password(form.password.data)
         db.session.add(user)
         db.session.commit()

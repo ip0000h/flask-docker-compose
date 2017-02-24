@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-from flask.ext.debugtoolbar import DebugToolbarExtension
-from flask.ext.login import LoginManager
-from flask.ext.mail import Mail
+from flask_debugtoolbar import DebugToolbarExtension
+from flask_login import LoginManager
+from flask_mail import Mail
 
 from database import db
 from users.models import User

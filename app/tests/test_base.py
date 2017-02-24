@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import unittest
-from flask.ext.testing import TestCase
+from flask_testing import TestCase
 
 from app import app, db
 from users.models import User
