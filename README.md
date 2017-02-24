@@ -1,7 +1,5 @@
 # flask-docker-compose
 
-[![Circle CI](https://circleci.com/gh/ip0000h/flask-docker-compose.svg?style=svg)](https://circleci.com/gh/ip0000h/flask-docker-compose)
-
 ## About
 
 Docker-Flask is about Flask project organization and running it in a
