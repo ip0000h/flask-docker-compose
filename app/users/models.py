@@ -8,10 +8,11 @@ import bcrypt
 from database import TimestampMixin, db
 
 
-class Client(TimestampMixin, db.Model):
+class User(TimestampMixin, db.Model):
     __tablename__ = 'client'
 
     id = db.Column(db.Integer, primary_key=True, nullable=False)
+    username = db.Column(db.String(255), nullable=True, unique=True)
     email = db.Column(db.String(255), nullable=True, unique=True)
     phone = db.Column(db.String(64), nullable=True, unique=True)
     active = db.Column(db.Boolean(), nullable=False, default=False)

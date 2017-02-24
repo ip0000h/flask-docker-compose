@@ -7,7 +7,7 @@ from wtforms.validators import DataRequired, EqualTo, Email, Length
 from flask_wtf import Form, RecaptchaField
 
 from database import db
-from packages.users.models import Client
+from users.models import User
 
 
 class EmailForm(Form):

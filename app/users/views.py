@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """Users views."""
+import logging
 from datetime import datetime
 from itsdangerous import URLSafeTimedSerializer
 
@@ -8,9 +9,8 @@ from flask import (Blueprint, abort, flash, redirect,
                    render_template, request, session, url_for)
 from flask_login import current_user, login_user, logout_user
 
-from app import app
 from database import db
-from packages.users.models import Client
+from users.models import User
 
 from .decorators import requires_login
 from .forms import (EmailForm, LoginForm, PasswordForm,
@@ -38,7 +38,7 @@ def login():
             return redirect(
                 request.args.get('next') or url_for('default_index'))
         else:
-            app.logger.debug("Login failed.")
+            logging.debug("Login failed.")
             flash(u"Login failed.", 'error')
             return redirect(url_for('users.login'))
     return render_template('users/login.html', form=form, error=error)
@@ -58,11 +58,11 @@ def signup():
     form = SignUpForm()
     session.pop('client_id', None)
     if request.method == 'POST' and form.validate_on_submit():
-        app.logger.debug("Email: {0}".format(form.email.data))
+        logging.debug("Email: {0}".format(form.email.data))
         check_user = Client.query.filter_by(email=form.email.data).first()
         print(check_user)
         if check_user:
-            app.logger.debug(
+            logging.debug(
                 "Email {0} already exist in the database.".format(
                     form.email.data))
             msg = u"""
@@ -85,9 +85,9 @@ def signup():
         try:
             ts = URLSafeTimedSerializer(app.config["SECRET_KEY"])
             token = ts.dumps(user.email, salt='email-confirm-key')
-            app.logger.debug("Confirm token: {0}".format(token))
+            logging.debug("Confirm token: {0}".format(token))
         except Exception as e:
-            app.logger.error(e)
+            logging.error(e)
             abort(404)
         subject = u"Confirm your email"
         confirm_url = url_for(
@@ -101,7 +101,7 @@ def signup():
             Account was successfully created.
             Check your email to confirm account.
         """
-        app.logger.debug("New account was successfully created.")
+        logging.debug("New account was successfully created.")
         flash(msg, 'success')
         db.session.commit()
         return redirect(url_for('users.login'))
@@ -156,9 +156,9 @@ def confirm_email(token):
         ts = URLSafeTimedSerializer(app.config["SECRET_KEY"])
         email = ts.loads(token, salt="email-confirm-key", max_age=86400)
     except Exception as e:
-        app.logger.error(e)
+        logging.error(e)
         abort(404)
-    app.logger.debug("Token: {0} email: {1}".format(token, email))
+    logging.debug("Token: {0} email: {1}".format(token, email))
     user = Client.query.filter_by(email=email).first_or_404()
     user.active = True
     user.confirmed_date = datetime.utcnow()
@@ -169,7 +169,7 @@ def confirm_email(token):
         Your account is active now. Please, login.
     """
     flash(msg, 'success')
-    app.logger.debug("Account {0} is active now.".format(email))
+    logging.debug("Account {0} is active now.".format(email))
     return redirect(url_for('users.login'))
 
 
@@ -178,7 +178,7 @@ def reset():
     form = EmailForm()
     if request.method == 'POST' and form.validate_on_submit():
         user = Client.query.filter_by(email=form.email.data).first_or_404()
-        app.logger.debug(
+        logging.debug(
             "Password reset request from {0}".format(
                 user.email))
         subject = "Password reset requested"
@@ -188,7 +188,7 @@ def reset():
             ts = URLSafeTimedSerializer(app.config["SECRET_KEY"])
             token = ts.dumps(user.email, salt='recover-key')
         except Exception as e:
-            app.logger.error(e)
+            logging.error(e)
             abort(404)
         recover_url = url_for(
             'users.reset_with_token',
@@ -214,7 +214,7 @@ def reset_with_token(token):
         ts = URLSafeTimedSerializer(app.config["SECRET_KEY"])
         email = ts.loads(token, salt="recover-key", max_age=86400)
     except Exception as e:
-        app.logger.error(e)
+        logging.error(e)
         abort(404)
     form = PasswordForm()
     if request.method == 'POST' and form.validate_on_submit():

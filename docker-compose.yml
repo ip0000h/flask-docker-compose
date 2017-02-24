@@ -28,8 +28,5 @@ redis:
   restart: always
   image: redis:latest
   env_file: redis/.env
-  # volumes:
-  #   - ./redis/redis.conf:/data/redis.conf:ro
-  # command: redis-server /data/redis.conf
   ports:
     - "6379"
